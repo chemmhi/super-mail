@@ -1,4 +1,57 @@
-body {
-    padding: 0;
-    margin: 0;
+@import '~assets/css/normalize.css';
+
+:root {
+  --color-text:black;
+  --color-high-text:#666;
+  --color-tint:#f6f6f6;
+  --color-background:white;
+  --color-hover:#dedede;
+  --font-size:14px;
+  --line-height:1.5;
 }
+*,
+*::before,
+*::after {
+  margin:0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Helvetica Neue", sans-serif;
+  user-select: none; /* 禁止用户鼠标在界面上选中文字和图片*/
+  -webkit-tap-highlight-color: transparent;  /*webkit是苹果浏览器引擎，tap点击，highlight背景高亮，color颜色，颜色用数值调节*/
+  background:var(--color-background);
+  color:var(--color-text);
+  width:100vw;
+}
+
+a {
+  color:var(--color-text);
+  text-decoration: none;
+}
+
+.clear-fix::after {
+  clear:both;
+  content: '';
+  display:block;
+  width:0;
+  height:0;
+  visibility: hidden;
+}
+
+.clear-fix {
+  zoom:1;
+}
+
+.left {
+  float:left;
+}
+
+.right {
+  float: right;
+}
+
+
