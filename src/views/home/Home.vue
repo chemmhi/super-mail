@@ -9,7 +9,8 @@
             ref="scroll"
             :probe-type="3"
             :pull-up-load="true"
-            @scroll="contextScroll" @pull-up-end="pullUp">
+            @scroll="contextScroll"
+            @pull-up-end="pullUp">
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature></home-feature>
@@ -60,6 +61,7 @@
           'sell':{page:0,list:[]},
         },
         showBk2Top:false,
+        timer:null,
       }
     },
     created(){
@@ -67,6 +69,15 @@
       this.getHomeGoodsContent('pop')
       this.getHomeGoodsContent('new')
       this.getHomeGoodsContent('sell')
+
+    },
+    mounted(){
+      // const refresh= this.debounce(this.$refs.scroll.refresh)
+      this.emitter.on('imgEndLoad',()=>{
+        // this.$refs.scroll.refresh()
+        this.$refs.scroll && this.debounce(this.$refs.scroll.refresh)();
+        // this.debounce(this.$refs.scroll.scroll.refresh,);
+      })
     },
     methods:{
       /*
@@ -94,6 +105,18 @@
       pullUp(){
         this.getHomeGoodsContent(this.currentType)
         this.$refs.scroll.scroll.refresh()
+      },
+
+      debounce(func,delay){
+      let timer=null
+      //   console.log(this.timer)
+        return (...args)=>{
+          if (timer) {clearTimeout(timer)}
+          timer = setTimeout (()=>{
+            func(args)
+          }, delay)
+        }
+
       },
       /*
        *  网络请求

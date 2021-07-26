@@ -48,7 +48,7 @@
         this.handleDom();
         // 2.开启定时器
         this.startTimer();
-      }, 100)
+      }, 1000)
     },
     methods: {
       /**
@@ -108,8 +108,11 @@
        */
       handleDom: function () {
         // 1.获取要操作的元素
-        let swiperEl = document.querySelector('.swiper-other');
-        let slidesEls = swiperEl.getElementsByClassName('slide');
+        let swiperEl = document.querySelector('.swiper');
+        // let swiperEl = document.querySelector('.swiper-other');
+
+        // let slidesEls = swiperEl.getElementsByClassName('slide');
+        let slidesEls = document.getElementsByClassName('slide');
         // 2.保存个数
         this.slideCount = slidesEls.length;
         // 3.如果大于1个, 那么在前后分别添加一个slide

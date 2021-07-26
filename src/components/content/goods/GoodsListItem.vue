@@ -1,7 +1,7 @@
 <template>
   <div class="item">
     <a :href="item.link">
-      <img :src="item.show.img" alt="">
+      <img :src="item.show.img" alt="" @load="endLoad">
     </a>
     <div class="item-info">
       <p>{{ item.title }}</p>
@@ -21,6 +21,11 @@ export default {
         return {}
       }
     }
+  },
+  methods:{
+    endLoad(){
+      this.emitter.emit('imgEndLoad')
+    },
   }
 }
 </script>

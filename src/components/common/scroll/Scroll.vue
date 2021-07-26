@@ -31,13 +31,16 @@
       scrollTo(x,y,time=500){
         this.scroll.scrollTo(x,y,time)
       },
+      refresh(){
+        this.scroll.refresh()
+      }
 
     },
     mounted() {
       this.scroll = new BetterScroll(this.$refs.wrapper,{
         pullUpLoad: this.pullUpLoad,
         probeType:this.probeType,
-        observeDOM: true,
+        // observeDOM: true,
         click: true,
       })
       this.scroll.on('scroll',(position)=>{
