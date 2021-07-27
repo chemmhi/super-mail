@@ -11,14 +11,20 @@
             :pull-up-load="true"
             @scroll="contextScroll"
             @pull-up-end="pullUp">
-      <home-swiper :banners="banners"></home-swiper>
+      <home-swiper :banners="banners"
+                   @swiperImgLoad="swiperImgLoad"/>
       <home-recommend-view :recommends="recommends"></home-recommend-view>
       <home-feature></home-feature>
       <tab-controller :content="['流行','新款','精选']"
-                      @tabSwitch="tabClick"/>
+                      @tabSwitch="tabClick"
+                      ref=tabController1 />
       <goods-list :goodList="currentTypeContent"></goods-list>
     </scroll>
     <back-to-top @click="bk2TopClick" v-show="showBk2Top"/>
+    <tab-controller :content="['流行','新款','精选']"
+                    @tabSwitch="tabClick"
+                    v-show="showTabControl"
+                    ref=tabController2 />
   </div>
 </template>
 
@@ -61,7 +67,10 @@
           'sell':{page:0,list:[]},
         },
         showBk2Top:false,
+        showTabControl:false,
         timer:null,
+        tabControllerOffsetTop:0,
+        currentScrollY:0,
       }
     },
     created(){
@@ -79,6 +88,16 @@
         // this.debounce(this.$refs.scroll.scroll.refresh,);
       })
     },
+    unmounted() {
+      console.log('home destroyed');
+    },
+    activated() {
+      this.$refs.scroll.refresh()
+      this.$refs.scroll.scrollTo(0,this.currentScrollY)
+    },
+    deactivated() {
+      this.currentScrollY=this.$refs.scroll.scroll.y
+    },
     methods:{
       /*
        *  事件监听
@@ -95,18 +114,24 @@
             this.currentType='sell'
             break
         }
+        this.$refs.tabController1.currentIndex=index
+        this.$refs.tabController2.currentIndex=index
       },
       bk2TopClick(){
         this.$refs.scroll.scrollTo(0,0,1000)
       },
+
       contextScroll(position){
         this.showBk2Top=-position.y>1000
+        this.showTabControl=-position.y>this.tabControllerOffsetTop
       },
       pullUp(){
         this.getHomeGoodsContent(this.currentType)
         this.$refs.scroll.scroll.refresh()
       },
-
+      swiperImgLoad(){
+        this.tabControllerOffsetTop=this.$refs.tabController1.$el.offsetTop
+      },
       debounce(func,delay){
       let timer=null
       //   console.log(this.timer)

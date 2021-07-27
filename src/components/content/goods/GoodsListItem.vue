@@ -1,8 +1,6 @@
 <template>
-  <div class="item">
-    <a :href="item.link">
-      <img :src="item.show.img" alt="" @load="endLoad">
-    </a>
+  <div class="item" @click="itemClick">
+    <img :src="item.show.img" alt="" @load="endLoad">
     <div class="item-info">
       <p>{{ item.title }}</p>
       <span class="price">{{ item.price }}</span>
@@ -26,6 +24,14 @@ export default {
     endLoad(){
       this.emitter.emit('imgEndLoad')
     },
+    itemClick(){
+      this.$router.push({
+        path:'/details',
+        query:{
+          iid:this.item.iid
+        }
+      })
+    }
   }
 }
 </script>

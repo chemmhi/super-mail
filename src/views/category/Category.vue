@@ -226,6 +226,9 @@ export default {
     bs.on('pullingUp',()=>{
       console.log('上拉加载');
     })
+  },
+  destroyed() {
+    console.log('category destroyed');
   }
 }
 </script>
