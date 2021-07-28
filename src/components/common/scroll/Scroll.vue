@@ -46,7 +46,7 @@
       this.scroll.on('scroll',(position)=>{
         this.$emit('scroll',position)
       })
-      this.scroll.on('pullingUp',()=>{
+      this.pullUpLoad && this.scroll.on('pullingUp',()=>{
         this.$emit('pullUpEnd')
         this.scroll.finishPullUp()
       })

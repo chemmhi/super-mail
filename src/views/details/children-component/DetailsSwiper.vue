@@ -1,7 +1,7 @@
 <template>
   <swiper class="details-swiper">
     <swiper-item v-for='item in topImage'>
-      <img :src="item" alt="">
+      <img :src="item" alt="" @load="detailsSwiperEnd">
     </swiper-item>
   </swiper>
 </template>
@@ -10,6 +10,11 @@
   import {Swiper,SwiperItem} from 'components/common/swiper-other'
 export default {
   name: "DetailsSwiper",
+  data(){
+    return {
+      endLoadImageCount:0
+    }
+  },
   props:{
     topImage:{
       type:Array,
@@ -21,6 +26,11 @@ export default {
   components:{
     Swiper,
     SwiperItem,
+  },
+  methods:{
+    detailsSwiperEnd(){
+      if (++this.endLoadImageCount===this.topImage.length) this.$emit('detailsSwiperEnd')
+    }
   }
 }
 </script>

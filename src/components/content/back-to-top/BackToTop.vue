@@ -11,12 +11,15 @@ export default {
 </script>
 
 <style scoped>
-  .back-to-top img {
+  .back-to-top {
     position: fixed;
     right:4vw;
     bottom: 14vh;
+    opacity: .7;
+    z-index: 100;
+  }
+  .back-to-top img {
     width:50px;
     height:50px;
-    opacity: .7;
   }
 </style>

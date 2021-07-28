@@ -1,5 +1,5 @@
 <template>
-  <div class="slide">
+  <div class="slide" id="slide-item">
     <slot></slot>
   </div>
 </template>

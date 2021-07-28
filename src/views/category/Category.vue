@@ -218,7 +218,8 @@ export default {
       movable: true,
       zoom: true,
       probeType:4,
-      pullUpLoad:true
+      pullUpLoad:true,
+      // observeDOM:true,
     })
     bs.on('scroll',(position)=>{
       // console.log(position);
