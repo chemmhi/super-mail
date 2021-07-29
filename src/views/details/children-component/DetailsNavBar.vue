@@ -36,6 +36,7 @@
       },
       centerItemClick(index){
         this.currentItem=index
+        this.$emit('centerItemClick',index)
       }
     }
   }

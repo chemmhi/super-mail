@@ -7,7 +7,7 @@
 		<div class="shop-other-info">
 			<div class="shop-other-sell">
 				<div>
-					<p class="f16">{{shop.sells }}</p>
+					<p class="f16">{{saveNum(shop.sells)}}</p>
 					<p>总销量</p>
 				</div>
 				<div>
@@ -41,10 +41,12 @@
 			}
 		},
 
-		filters: {
-			saveNum(value){
-				if(value < 10000) return value;
-				return (value/10000).toFixed(1)+'万'
+		computed: {
+			saveNum(){
+				return (value)=>{
+				  if(value < 10000) return value;
+				  return (value/10000).toFixed(1)+'万'
+        }
 			}
 		}
 	}

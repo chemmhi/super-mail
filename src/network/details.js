@@ -34,3 +34,12 @@ export class Shop {
     this.goodsCount=shopInfo.cGoods;
   }
 }
+
+export class ItemParams {
+  constructor(itemParams) {
+    this.desc=itemParams.rule.desc
+    this.disclaimer=itemParams.rule.disclaimer
+    this.rulesParams=itemParams.rule.tables
+    this.infoParams=itemParams.info.set
+  }
+}
