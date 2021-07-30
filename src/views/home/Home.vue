@@ -41,6 +41,7 @@
   import HomeFeature from "@/views/home/home-child-component/HomeFeature";
 
   import {getHomeMultiData,getHomeGoods} from "network/home";
+  import {imgEventListener} from "@/common/mixin";
 
   export default {
     name: "Home",
@@ -80,20 +81,10 @@
       this.getHomeGoodsContent('sell')
 
     },
-    mounted(){
-      // const refresh= this.debounce(this.$refs.scroll.refresh)
-      this.emitter.on('imgEndLoad',()=>{
-        // this.$refs.scroll.refresh()
-        this.$refs.scroll && this.debounce(this.$refs.scroll.refresh)();
-        // this.debounce(this.$refs.scroll.scroll.refresh,);
-      })
-    },
-    unmounted() {
-      console.log('home destroyed');
-    },
+    mixins:[imgEventListener],
     activated() {
       this.$refs.scroll.refresh()
-      this.$refs.scroll.scrollTo(0,this.currentScrollY)
+      this.$refs.scroll.scrollTo(0,this.currentScrollY,0)
     },
     deactivated() {
       this.currentScrollY=this.$refs.scroll.scroll.y

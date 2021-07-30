@@ -1,6 +1,6 @@
 <template>
   <div class="item" @click="itemClick">
-    <img :src="item.show.img" alt="" @load="endLoad">
+    <img :src="imgUrl" alt="" @load="endLoad">
     <div class="item-info">
       <p>{{ item.title }}</p>
       <span class="price">{{ item.price }}</span>
@@ -18,6 +18,12 @@ export default {
       default(){
         return {}
       }
+    },
+    timer: 0
+  },
+  data(){
+    return {
+
     }
   },
   methods:{
@@ -31,8 +37,15 @@ export default {
           iid:this.item.iid
         }
       })
+    },
+
+  },
+  computed:{
+    imgUrl(){
+      return this.item.image || this.item.show.img
     }
-  }
+  },
+
 }
 </script>
 

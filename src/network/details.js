@@ -43,3 +43,9 @@ export class ItemParams {
     this.infoParams=itemParams.info.set
   }
 }
+
+export function getRecommend(){
+  return request({
+    url:'/recommend',
+  })
+}

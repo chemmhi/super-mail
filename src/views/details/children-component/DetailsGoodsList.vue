@@ -37,7 +37,7 @@ export default {
       if(this.detailsInfo.detailImage[0].key) this.key=this.detailsInfo.detailImage[0].key;
     },
     detailsGoodListEndLoad(){
-      this.$emit('detailsGoodListEndLoad')
+      this.emitter.emit('imgEndLoad')
     }
   },
   data(){

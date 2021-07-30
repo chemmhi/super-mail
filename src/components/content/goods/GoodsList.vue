@@ -6,10 +6,16 @@
 
 <script>
 import GoodsListItem from "@/components/content/goods/GoodsListItem";
+
 export default {
   name: "GoodsList",
   components:{
     GoodsListItem
+  },
+  data(){
+    return {
+      timer:null
+    }
   },
   props:{
     goodList:{
@@ -18,6 +24,9 @@ export default {
         return []
       }
     }
+  },
+  methods:{
+
   }
 }
 </script>

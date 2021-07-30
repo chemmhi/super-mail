@@ -41,6 +41,7 @@ export default {
     position: sticky;
     top:44px;
     background-color: var(--color-background);
+    font-weight: bold;
   }
   .tab-item {
     flex:1;

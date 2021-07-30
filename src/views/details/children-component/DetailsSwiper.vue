@@ -29,7 +29,7 @@ export default {
   },
   methods:{
     detailsSwiperEnd(){
-      if (++this.endLoadImageCount===this.topImage.length) this.$emit('detailsSwiperEnd')
+      if (++this.endLoadImageCount===this.topImage.length) this.emitter.emit('imgEndLoad')
     }
   }
 }

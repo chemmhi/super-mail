@@ -3,7 +3,8 @@
 :root {
   --color-text:black;
   --color-high-text: #625858;
-  --color-tint: #b7b7b7;
+  /*--color-tint: #b7b7b7;*/
+  --color-tint: #f0f0f0;
   --color-background:white;
   --color-hover:#dedede;
   --font-size:14px;

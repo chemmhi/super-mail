@@ -20,7 +20,7 @@
 <script>
   import NavBar from "@/components/common/navbar/NavBar";
   export default {
-    name: "DetailsNavBar",
+     name: "DetailsNavBar",
     components:{
       NavBar
     },
@@ -58,6 +58,9 @@
   }
   .active {
     color:var(--color-high-text)
+  }
+  .nav-bar {
+    font-weight: bold;
   }
 
 </style>

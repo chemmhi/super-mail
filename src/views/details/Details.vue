@@ -2,11 +2,13 @@
   <div id="details">
     <details-nav-bar class="details-nav" @centerItemClick="centerItemClick" ref="detailsNavBar"/>
     <scroll class="content" ref="detailsScroll" :probe-type="3" @scroll="scroll">
-      <details-swiper :top-image="topImage" @detailsSwiperEnd="detailsSwiperEnd"/>
+      <details-swiper :top-image="topImage" />
       <details-goods :goods="goods" />
       <details-shop-info :shop="shop" />
-      <details-goods-list :details-info="detailsInfo" @detailsGoodListEndLoad="detailsSwiperEnd"/>
+      <details-goods-list :details-info="detailsInfo" />
       <details-item-params :item-params="itemParams" ref="detailsItemParams"/>
+      <details-comments :comment-info="commentInfo" ref="detailsComments"/>
+      <goods-list :good-list="recommendsImage" ref="detailsRecommend"/>
     </scroll>
     <back-to-top @click="detailsBackToTop" v-show="showDetailsBackToTop" />
   </div>
@@ -19,12 +21,16 @@
   import DetailsShopInfo from "@/views/details/children-component/DetailsShopInfo";
   import DetailsGoodsList from "@/views/details/children-component/DetailsGoodsList";
   import DetailsItemParams from "@/views/details/children-component/DetailsItemParams";
+  import DetailsComments from "@/views/details/children-component/DetailsComments";
 
   import Scroll from "@/components/common/scroll/Scroll";
   import BackToTop from "@/components/content/back-to-top/BackToTop";
 
-  import {getDetails, GoodsDetails, Shop, ItemParams} from "@/network/details";
+  import {getDetails, GoodsDetails, Shop, ItemParams, getRecommend} from "@/network/details";
   import GoodsList from "@/components/content/goods/GoodsList";
+
+  import {imgEventListener} from "@/common/mixin";
+  import {debounce} from "@/common/utils";
 
   export default {
     name: "Details",
@@ -38,6 +44,11 @@
         showDetailsBackToTop:false,
         itemParams:{},
         currentItem:null,
+        commentInfo:[],
+        recommendsImage:[],
+        itemOffsetTop:[],
+        getItemOffsetTop:null,
+        positionY:0
       }
     },
     components:{
@@ -48,13 +59,24 @@
       DetailsShopInfo,
       DetailsGoodsList,
       DetailsItemParams,
+      DetailsComments,
 
       Scroll,
-      BackToTop
+      BackToTop,
     },
     created(){
       this.getDetailsContent(this.iid)
+      this.getRecommendImage()
+      this.getItemOffsetTop = debounce(()=>{
+          this.itemOffsetTop = []
+          this.itemOffsetTop.push(0)
+          if (this.$refs.detailsItemParams) this.itemOffsetTop.push(this.$refs.detailsItemParams.$el.offsetTop)
+          if (this.$refs.detailsComments) this.itemOffsetTop.push(this.$refs.detailsComments.$el.offsetTop)
+          if(this.$refs.detailsRecommend) this.itemOffsetTop.push(this.$refs.detailsRecommend.$el.offsetTop)
+          this.itemOffsetTop.push(Number.MAX_VALUE)
+        },)
     },
+    mixins:[imgEventListener],
     methods:{
       /*网络请求,请求详情页的所有数据*/
       getDetailsContent(iid){
@@ -65,12 +87,13 @@
           this.shop = new Shop(data.shopInfo);
           this.detailsInfo= data.detailInfo
           this.itemParams = new ItemParams(data.itemParams)
+          if (data.rate.cRate) this.commentInfo= data.rate.list
         })
       },
-
-      /*监听图片加载完成后进行刷新*/
-      detailsSwiperEnd(){
-        this.$refs.detailsScroll.refresh()
+      getRecommendImage(){
+        getRecommend().then((res)=>{
+          this.recommendsImage = res.data.list
+        })
       },
       /*回到顶部点击事件*/
       detailsBackToTop(){
@@ -79,27 +102,26 @@
       /*监听scroll组件内部的点击事件*/
       scroll(position){
         this.showDetailsBackToTop = -position.y>1000
+        this.positionY=-position.y
+        for (let i = 1; i< this.itemOffsetTop.length; i++){
+          if (this.itemOffsetTop[i] > this.positionY) {
+            this.$refs.detailsNavBar.currentItem = i-1;
+            break
+          }
+        }
       },
       /*监听导航页的点击事件，实现跳转功能*/
       centerItemClick(index){
-        this.getCurrentItem(index)
-        this.$refs.detailsScroll.scrollTo(0,-this.currentItem.$el.offsetTop,500)
-
+        this.$refs.detailsScroll.scrollTo(0,-this.itemOffsetTop[index],500)
       },
-      getCurrentItem(index){
-        switch (index){
-          case 0:
-            this.currentItem=this.$refs.detailsNavBar;
-            break
-          case 1:
-            this.currentItem=this.$refs.detailsItemParams;
-            break;
-          case 2:
-            break
-        }
-      }
+
+      detailsImgEndLoad(){
+        this.newRefresh()
+        this.getItemOffsetTop()
+      },
     }
   }
+
 </script>
 
 <style scoped>
