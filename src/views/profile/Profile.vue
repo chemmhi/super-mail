@@ -1,10 +1,20 @@
 <template>
-  <h1>我的</h1>
+  <grid-view>
+    <div v-for="i in 11">
+      <div>hello world</div>
+    </div>
+  </grid-view>
+
 </template>
 
 <script>
+import GridView from "@/components/common/grid-view/GridView";
+
 export default {
-  name: "Profile"
+  name: "Profile",
+  components:{
+    GridView,
+  }
 }
 </script>
 

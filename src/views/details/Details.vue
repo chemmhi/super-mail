@@ -1,7 +1,7 @@
 <template>
   <div id="details">
     <details-nav-bar class="details-nav" @centerItemClick="centerItemClick" ref="detailsNavBar"/>
-    <scroll class="content" ref="detailsScroll" :probe-type="3" @scroll="scroll">
+    <scroll class="content" ref="Scroll" :probe-type="3" @scroll="scroll">
       <details-swiper :top-image="topImage" />
       <details-goods :goods="goods" />
       <details-shop-info :shop="shop" />
@@ -113,7 +113,7 @@
       },
       /*回到顶部点击事件*/
       detailsBackToTop(){
-        this.$refs.detailsScroll.scrollTo(0,0,500)
+        this.$refs.Scroll.scrollTo(0,0,500)
       },
       /*监听scroll组件内部的点击事件*/
       scroll(position){
@@ -121,14 +121,14 @@
         this.positionY=-position.y
         for (let i = 1; i< this.itemOffsetTop.length; i++){
           if (this.itemOffsetTop[i] > this.positionY) {
-            this.$refs.detailsNavBar.currentItem = i-1;
+            if (this.$refs.detailsNavBar) this.$refs.detailsNavBar.currentItem = i-1;
             break
           }
         }
       },
       /*监听导航页的点击事件，实现跳转功能*/
       centerItemClick(index){
-        this.$refs.detailsScroll.scrollTo(0,-this.itemOffsetTop[index],500)
+        this.$refs.Scroll.scrollTo(0,-this.itemOffsetTop[index],500)
       },
 
       addToCart(){
@@ -152,7 +152,7 @@
 
       },
 
-      detailsImgEndLoad(){
+      imgEndLoad(){
         this.newRefresh()
         this.getItemOffsetTop()
       },

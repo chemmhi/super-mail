@@ -42,7 +42,7 @@ export default {
   },
   computed:{
     imgUrl(){
-      return this.item.image || this.item.show.img
+      return this.item.image || this.item.img || this.item.show.img
     }
   },
 
