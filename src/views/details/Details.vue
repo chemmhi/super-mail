@@ -11,6 +11,8 @@
       <goods-list :good-list="recommendsImage" ref="detailsRecommend"/>
     </scroll>
     <back-to-top @click="detailsBackToTop" v-show="showDetailsBackToTop" />
+    <details-bottom-bar @addToCart="addToCart"/>
+    <toast :message="toastMessage" :is-show="toastShow"/>
   </div>
 </template>
 
@@ -22,6 +24,8 @@
   import DetailsGoodsList from "@/views/details/children-component/DetailsGoodsList";
   import DetailsItemParams from "@/views/details/children-component/DetailsItemParams";
   import DetailsComments from "@/views/details/children-component/DetailsComments";
+  import DetailsBottomBar from "@/views/details/children-component/DetailsBottomBar";
+  import AddToCartPrompt from "@/views/details/children-component/AddToCartPrompt";
 
   import Scroll from "@/components/common/scroll/Scroll";
   import BackToTop from "@/components/content/back-to-top/BackToTop";
@@ -31,6 +35,9 @@
 
   import {imgEventListener} from "@/common/mixin";
   import {debounce} from "@/common/utils";
+
+  import {mapActions} from 'vuex'
+  import Toast from "@/components/common/toast/Toast";
 
   export default {
     name: "Details",
@@ -48,10 +55,14 @@
         recommendsImage:[],
         itemOffsetTop:[],
         getItemOffsetTop:null,
-        positionY:0
+        positionY:0,
+        showPrompt: false,
+        toastMessage: '',
+        toastShow: false,
       }
     },
     components:{
+      Toast,
       GoodsList,
       DetailsNavBar,
       DetailsSwiper,
@@ -60,6 +71,8 @@
       DetailsGoodsList,
       DetailsItemParams,
       DetailsComments,
+      DetailsBottomBar,
+      AddToCartPrompt,
 
       Scroll,
       BackToTop,
@@ -78,6 +91,9 @@
     },
     mixins:[imgEventListener],
     methods:{
+      ...mapActions({
+        add:'addToCart',
+      }),
       /*网络请求,请求详情页的所有数据*/
       getDetailsContent(iid){
         getDetails(iid).then((res)=>{
@@ -115,6 +131,27 @@
         this.$refs.detailsScroll.scrollTo(0,-this.itemOffsetTop[index],500)
       },
 
+      addToCart(){
+        const itemOfCart = {};
+        itemOfCart.iid = this.iid;
+        itemOfCart.desc = this.goods.desc;
+        itemOfCart.title = this.goods.title;
+        itemOfCart.price = this.goods.realPrice;
+        itemOfCart.image = this.topImage[0];
+        itemOfCart.count = 1;
+        itemOfCart.isChecked = true;
+        // this.$store.dispatch('addToCart',itemOfCart)
+        this.add(itemOfCart).then(res=>{
+          this.toastMessage = res;
+          this.toastShow = true;
+          setTimeout(()=>{
+            this.toastShow = false;
+            this.toastMessage = '';
+          },1500)
+        })
+
+      },
+
       detailsImgEndLoad(){
         this.newRefresh()
         this.getItemOffsetTop()
@@ -136,9 +173,14 @@
    z-index: 12;
  }
  .content{
-   height: calc(100vh - 44px);
+   height: calc(100vh - 44px - 49px);
    /*height: 100vh;*/
    overflow-y: hidden;
 
+ }
+ .prompt{
+   position: fixed;
+   z-index: 100;
+   top: 0;
  }
 </style>

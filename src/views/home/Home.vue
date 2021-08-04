@@ -167,6 +167,7 @@
   }
   .nav-bar {
     background-color: var(--color-tint);
+    font-weight: bold;
     color:black;
     position: fixed;
     left: 0;
