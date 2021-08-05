@@ -1,23 +1,25 @@
 <template>
   <div id="user-info">
-    <a href="#" class="clear-fix">
-      <slot name="user-icon">
-        <svg class="privateImage-svg left">
-          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
-        </svg>
-      </slot>
-      <div class="login-info left">
-        <slot name="user-nickname">
-          <div>登录/注册</div>
+    <a href="#" class="info-bar">
+      <div class="icon-info">
+        <slot name="user-icon">
+          <div class="user-icon">
+            <img src="~assets/img/profile/user.svg" alt="" >
+          </div>
         </slot>
-        <div class="phone">
-          <span>
-            <svg data-v-735ff1be="" fill="#fff" class="icon-mobile"><use data-v-735ff1be="" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#mobile"></use></svg>
-          </span>
-          <slot name="user-phone">暂无绑定手机号</slot>
+        <div class="login-info">
+          <slot name="user-nickname">
+            <div>登录/注册</div>
+          </slot>
+          <div class="phone">
+            <span>
+              <img src="~assets/img/profile/mobile.svg" alt="">
+            </span>
+            <slot name="user-phone">暂无绑定手机号</slot>
+          </div>
         </div>
       </div>
-      <svg data-v-735ff1be="" fill="#fff" class="arrow-svg right"><use data-v-735ff1be="" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use></svg>
+      <div>&gt</div>
     </a>
   </div>
 </template>
@@ -34,14 +36,19 @@
     padding: 15px;
     margin-top: -5px;
   }
-  #user-info .privateImage-svg {
+  .info-bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .user-icon {
     width: 60px;
     height: 60px;
-    background-color: #fff;
-    border-radius: 30px;
+    border-radius: 50%;
   }
-  .left {
-    float: left;
+  .icon-info {
+    display: flex;
+    align-items: center;
   }
   #user-info .arrow-svg {
     width: 11px;
@@ -49,17 +56,17 @@
     margin-top: 18px;
   }
   #user-info .login-info {
-    color: #fff;
+    font-size: .8rem;
     margin: 10px 0 0 10px;
   }
   #user-info .login-info .phone {
     position: relative;
-    font-size: 13px;
+    font-size: .7rem;
     margin-top: 5px;
     margin-left: 15px;
     font-weight: 300;
   }
-  #user-info .login-info .phone .icon-mobile {
+  #user-info .login-info .phone img {
     position: absolute;
     width: 12px;
     height: 18px;

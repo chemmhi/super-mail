@@ -31,10 +31,12 @@ export default {
       this.emitter.emit('imgEndLoad')
     },
     itemClick(){
+      const iid = this.item.iid ? this.item.iid : this.item.item_id
+
       this.$router.push({
         path:'/details',
         query:{
-          iid:this.item.iid
+          iid:iid
         }
       })
     },

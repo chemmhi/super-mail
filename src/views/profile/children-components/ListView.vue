@@ -2,7 +2,7 @@
     <div id="list">
       <div v-for="(item, index) in listData" :key="index" class="item">
         <span class="icon">
-          <svg :fill="item.iconColor"><use :xlink:href="item.icon"></use></svg>
+          <img :src='item.src' alt="" v-if="item.src">
         </span>
         <div class="info">{{item.info}}</div>
       </div>
@@ -26,7 +26,7 @@
 <style scoped>
   #list {
     background-color: #fff;
-    font-size: 15px;
+    font-size: 1rem;
     color: #333;
   }
   #list .item {
@@ -34,7 +34,7 @@
     line-height: 44px;
     position: relative;
   }
-  .icon svg {
+  .icon img {
     width: 18px;
     height: 18px;
   }

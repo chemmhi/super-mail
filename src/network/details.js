@@ -37,10 +37,10 @@ export class Shop {
 
 export class ItemParams {
   constructor(itemParams) {
-    this.desc=itemParams.rule.desc
-    this.disclaimer=itemParams.rule.disclaimer
-    this.rulesParams=itemParams.rule.tables
-    this.infoParams=itemParams.info.set
+    this.desc=itemParams.rule ? itemParams.rule.desc : ''
+    this.disclaimer=itemParams.rule ? itemParams.rule.disclaimer : ''
+    this.rulesParams=itemParams.rule ? itemParams.rule.tables : []
+    this.infoParams= itemParams.rule ? itemParams.info.set : []
   }
 }
 

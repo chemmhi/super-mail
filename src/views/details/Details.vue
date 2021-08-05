@@ -97,7 +97,7 @@
       /*网络请求,请求详情页的所有数据*/
       getDetailsContent(iid){
         getDetails(iid).then((res)=>{
-          const data=res.result
+          const data=res ? res.result : {}
           this.topImage=data.itemInfo.topImages
           this.goods = new GoodsDetails(data.itemInfo,data.columns,data.shopInfo.services)
           this.shop = new Shop(data.shopInfo);

@@ -1,26 +1,28 @@
 <template>
   <div id="profile">
-    <nav-bar class="nav-bar"><div slot="center">小码哥商城</div></nav-bar>
-    <UserInfo></UserInfo>
+    <nav-bar class="nav-bar">
+      <template #center>我的档案</template>
+    </nav-bar>
+    <user-info></user-info>
 
     <section class="account">
       <div class="account-item">
         <div class="number">
           <span class="balance">0.00</span>元
         </div>
-        <div class="account-info">我的余额</div>
+        <div class="account-info">余额</div>
       </div>
       <div class="account-item">
         <div class="number">
           <span class="balance">0</span>个
         </div>
-        <div class="account-info">我的优惠</div>
+        <div class="account-info">优惠</div>
       </div>
       <div class="account-item">
         <div class="number">
           <span class="balance">0</span>分
         </div>
-        <div class="account-info">我的积分</div>
+        <div class="account-info">积分</div>
       </div>
     </section>
 
@@ -31,24 +33,25 @@
 
 <script>
   import UserInfo from "@/views/profile/children-components/UserInfo";
-  // import ListView from './childComps/ListView'
+  import ListView from "@/views/profile/children-components/ListView";
   import NavBar from "@/components/common/navbar/NavBar";
 	export default {
 		name: "Profile",
     components: {
 		  NavBar,
       UserInfo,
+      ListView,
     },
     data: function () {
 		  return {
 		    orderList: [
-          {icon: '#order', iconColor: '#ff8198', info: '我的消息'},
-          {icon: '#point', iconColor: '#fc7b53', info: '积分商城'},
-          {icon: '#vip', iconColor: '#ffc636', info: '会员卡'},
+          {src: require('@/assets/img/profile/message.svg'), info: '消息'},
+          {src: require('@/assets/img/profile/coins.svg'), info: '积分商城'},
+          {src: require('@/assets/img/profile/crown.svg'), info: '会员卡'},
         ],
         serviceList: [
-          {icon: '#service', iconColor: '#ff8198', info: '我的购物车'},
-          {icon: '#download', iconColor: '#ff8198', info: '下载购物APP'},
+          {src:require('@/assets/img/profile/cart.svg'), info: '购物车'},
+          {src:require('@/assets/img/profile/bag.svg'), info: '下载购物APP'},
         ]
       }
     },
@@ -63,8 +66,8 @@
   }
   .nav-bar {
     background-color: var(--color-tint);
-    font-weight: 700;
-    color: #fff;
+    font-weight: bold;
+    color: black;
   }
   .account {
     display: flex;
@@ -79,14 +82,14 @@
     margin-right: 0;
   }
   .account-item {
-    color: #666;
+    color: var(--color-high-text);
     font-size: 13px;
     padding: 18px;
   }
   .account-item .balance {
     font-size: 24px;
     font-weight: 700;
-    color: #ff5f3e;
+    color: black;
   }
   .account-info {
     margin-top: 6px;
