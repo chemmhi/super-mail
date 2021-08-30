@@ -1,11 +1,11 @@
-<template :key="1">
+<template>
   <div id="profile">
     <nav-bar class="nav-bar">
       <template #center>我的档案</template>
     </nav-bar>
     <user-info>
-      <template v-slot:user-nickname="userInfo" v-if="state">
-        <div>{{userInfo.userName}}</div>
+      <template v-slot:user-nickname v-if="state">
+        <div>{{ userInfo.userName }}</div>
       </template>
       <template #user-phone v-if="state">
         <div>{{userInfo.phoneNumber}}</div>
@@ -49,7 +49,7 @@
       UserInfo,
       ListView,
     },
-    data: function () {
+    data() {
 		  return {
 		    orderList: [
           {src: require('@/assets/img/profile/message.svg'), info: '消息'},
@@ -64,12 +64,9 @@
         state: false
       }
     },
-    mounted: function () {
-		  this.emitter.on('loginSuccess',(value)=>{
-        console.log(value);
-        this.userInfo = value
-        this.state = true
-      })
+    activated () {
+      this.state = this.$store.state.isLogin
+      this.userInfo = this.$store.state.userInfo
     },
     computed:{
 		  balance(){

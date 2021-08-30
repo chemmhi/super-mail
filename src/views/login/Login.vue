@@ -10,7 +10,7 @@
         <input type="text" id="loginUserName" placeholder="请输入用户名" name="loginUserName">
       </form-item>
       <form-item>
-        <label for="pwd">密码</label>
+        <label for="pwd" id="forPwd">密码</label>
         <input type="password" id="pwd" placeholder="请输入密码" name="pwd">
       </form-item>
       <form-item>
@@ -46,7 +46,11 @@ export default {
     FormItem,
     LoginFrame,
   },
-
+  data(){
+    return {
+      isUserName: false   //用来验证用户是否可以提交
+    }
+  },
   methods:{
     switchState(){
       this.$router.push('/register')
@@ -74,11 +78,10 @@ export default {
             if(val.isExistence){
               usernameLabel.innerText = '用户名'
               usernameLabel.style.color = ''
-              this.canBeSubmit = true
+              this.isUserName = true
               }else{   //说明服务器里没有数据
                 usernameLabel.innerText = '用户名不存在,去注册？'
                 usernameLabel.style.color = 'red'
-                this.canBeSubmit = false
               }
           })
         },
@@ -93,51 +96,63 @@ export default {
   },
   mounted() {
     let form = document.getElementById('form1')
-        // form.code.addEventListener('blur',this.getVeryficode)
-        // form.code.addEventListener('change',this.getVeryficode)
-        form.loginUserName.addEventListener('change',this.handle)
-        form.loginUserName.addEventListener('blur',this.handle)
-        form.addEventListener('submit', (e)=>{
-          if(this.canBeSubmit){
-            let form = e.target
-            let url = form.action
-            let newForm = new FormData(form)
-            let obj = Object.fromEntries(newForm.entries())  //将formData数据转换为普通的对象格式，这一步很重要
-            let forLoginCode = document.getElementById('forLoginCode')
-            fetch(url,{
-                method:'POST',
-                body: JSON.stringify(obj),
-                // credentials: 'include',
-                // mode: 'cors',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                }
-              }).then((response)=>{
-                return response.text()})
-                .then((value)=>{
-                  value = JSON.parse(value)
-                  if(value.status){  //说明请求到了数据
-                    this.$router.go(-1)
-                    this.emitter.emit('loginSuccess', value.data)
-                    this.$store.commit('changeToLogin')
-                    this.$store.commit('setUserName', value.data.userName)
-                    let cart = value.data.cart ? Array.from(value.data.cart) : []
-                    this.$store.commit('loadingCart', cart)
-                  }else if(value.msg === '密码错误'){
-                    let forPwdEl = document.getElementById('pwd')
-                    forPwdEl.style.borderColor = 'red'
-                    forLoginCode.innerText = '验证码'
-                    forLoginCode.style.color = ''
-                  }else{
-                    forLoginCode.innerText = '验证码错误'
-                    forLoginCode.style.color = 'red'
-                    this.imgChange({target: document.getElementById('loginImg')})
-                  }
-              })
-          }
-          e.preventDefault()
-        })
+    let forPwdEl = document.getElementById('pwd')
+    let labelForPwdEl = document.getElementById('forPwd')
+    form.loginUserName.addEventListener('change',this.handle)
+    form.loginUserName.addEventListener('blur',this.handle)
+    forPwdEl.addEventListener('blur',(e)=>{
+      e.target.style.borderColor = ''
+      labelForPwdEl.innerText = '密码'
+      labelForPwdEl.style.color = ''
+    })
+    forPwdEl.addEventListener('change',(e)=>{
+      e.target.style.borderColor = ''
+      labelForPwdEl.innerText = '密码'
+      labelForPwdEl.style.color = ''
+    })
+    form.addEventListener('submit', (e)=>{
+      if(this.isUserName){
+        let form = e.target
+        let url = form.action
+        let newForm = new FormData(form)
+        let obj = Object.fromEntries(newForm.entries())  //将formData数据转换为普通的对象格式，这一步很重要
+        let forLoginCode = document.getElementById('forLoginCode')
+        fetch(url,{
+            method:'POST',
+            body: JSON.stringify(obj),
+            // credentials: 'include',
+            // mode: 'cors',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          }).then((response)=>{
+            return response.text()})
+            .then((value)=>{
+              value = JSON.parse(value)
+              if(value.status){  //说明请求到了数据
+                this.$store.commit('setUserInfo', value.data)
+                this.$store.commit('changeToLogin')
+                this.$store.commit('setUserName', value.data.userName)
+                let cart = value.data.cart ? Array.from(value.data.cart) : []
+                this.$store.commit('loadingCart', cart)
+                this.$router.push('/profile')
+              }else if(value.msg === '密码错误'){
+                forPwdEl.style.borderColor = 'red'
+                labelForPwdEl.innerText = '密码错误'
+                labelForPwdEl.style.color = 'red'
+                forLoginCode.innerText = '验证码'
+                forLoginCode.style.color = ''
+                this.imgChange({target: document.getElementById('loginImg')})
+              }else{
+                forLoginCode.innerText = '验证码错误'
+                forLoginCode.style.color = 'red'
+                this.imgChange({target: document.getElementById('loginImg')})
+              }
+          })
+      }
+      e.preventDefault()
+})
   }
 }
 </script>

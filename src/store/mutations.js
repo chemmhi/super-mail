@@ -20,5 +20,8 @@ export default {
   },
   setUserName(state, payload){
     state.userName = payload
+  },
+  setUserInfo(state, payload){
+    state.userInfo = payload
   }
 }
