@@ -4,7 +4,7 @@
       <template #center>我的档案</template>
     </nav-bar>
     <user-info>
-      <template v-slot:user-nickname v-if="state">
+      <template v-slot:user-nickname="userInfo" v-if="state">
         <div>{{userInfo.userName}}</div>
       </template>
       <template #user-phone v-if="state">
@@ -66,8 +66,9 @@
     },
     mounted: function () {
 		  this.emitter.on('loginSuccess',(value)=>{
-          this.userInfo = value
-          this.state = true
+        console.log(value);
+        this.userInfo = value
+        this.state = true
       })
     },
     computed:{

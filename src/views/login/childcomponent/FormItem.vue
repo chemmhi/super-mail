@@ -12,6 +12,6 @@ export default {
 
 <style scoped>
   .form-item{
-    margin: 10px 0;
+    margin-top: 10px;
   }
 </style>

@@ -4,30 +4,27 @@
       <div>注册</div>
     </template>
   </login-frame>
-  <form id="form" name="form1" action="http://127.0.0.1:8001/user/regisger/" class="form" method="post">
+  <form id="form1" name="form1" action="javascript:viod(0)">
     <form-item>
-      <label for="username" id="forusername">用户名</label>
-      <input type="text" :value="state" style="display: none" name="state">
-      <input type="text" id="username" placeholder="请输入用户名" name="userName">
+      <label for="userName" id="forUserName">用户名</label>
+      <input type="text" id="userName" placeholder="请输入用户名" name="userName">
     </form-item>
     <form-item>
-      <form-item>
-        <label for="phone" id="forPhoneNum" >手机号</label>
-        <input type="text" id="phone" placeholder="请输入手机号" name="phoneNum">
-      </form-item>
+      <label for="phoneNum" id="forPhoneNum" >手机号</label>
+      <input type="text" id="phoneNum" placeholder="请输入手机号" name="phoneNum">
     </form-item>
     <form-item>
-      <label for="pwd">密码</label>
-      <input type="password" id="pwd" placeholder="请输入密码" name="pwd">
-    </form-item>
-    <form-item>
-      <label for="pwd">密码</label>
+      <label for="pwd1">密码</label>
       <input type="password" id="pwd1" placeholder="请输入密码" name="pwd1">
     </form-item>
     <form-item>
-        <label for="verify" id="forcode">验证码</label>
+      <label for="pwd2">密码</label>
+      <input type="password" id="pwd2" placeholder="请输入密码" name="pwd2">
+    </form-item>
+    <form-item>
+        <label for="registerCode" id="forRegisterCode">验证码</label>
         <div class="verify-container">
-          <input type="text" id="verify" placeholder="验证码" name="code">
+          <input type="text" id="registerCode" placeholder="验证码" name="registerCode">
           <img use-credentials="true"
                src="http://127.0.0.1:8001/user/verifycode/img"
                alt="" @click="imgChange">
@@ -187,8 +184,7 @@ export default {
 
     },
     mounted() {
-      let form = document.getElementById('form')
-      this.form = form
+      let form = document.getElementById('form1')
           form.code.addEventListener('blur',this.getVeryficode)
           form.code.addEventListener('change',this.getVeryficode)
           form.userName.addEventListener('change',this.handle)
@@ -228,7 +224,7 @@ export default {
 </script>
 
 <style scoped>
-#form{
+#form1{
     position: relative;
     z-index: 101;
     overflow: hidden;
@@ -236,19 +232,18 @@ export default {
     transform: translateX(-50%);
     display: flex;
     width: 250px;
-    margin-top: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
     border: solid #5555 1px;
-    align-content: space-evenly;
+    align-content: space-around;
     flex-direction: column;
     justify-content: space-evenly;
     flex-wrap: wrap;
     font-size: 14px;
   }
-  #form label{
+  #form1 label{
     display: block;
   }
-  .form input{
+  #form1 input{
     height: 28px;
     padding-left: 10px;
     margin-top: 5px;
@@ -285,14 +280,14 @@ export default {
   .button span{
     font-style: italic;
   }
-  #verify{
+  #registerCode{
     width: 80px;
   }
   .verify-container{
     display: flex;
     align-items: center;
   }
-  .form div img{
+  #form1 div img{
     width: 80px;
     height: 28px;
     margin-top: 5px;

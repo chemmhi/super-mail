@@ -18,6 +18,7 @@
         <div class="verify-container">
           <input type="text" id="loginCode" placeholder="验证码" name="loginCode">
           <img use-credentials="true"
+               id="loginImg"
                src="http://127.0.0.1:8001/user/verifycode/img"
                alt="" @click="imgChange">
         </div>
@@ -54,25 +55,6 @@ export default {
       // console.log(event);
       let target = event.target
       target.src = target.src + "?"
-    },
-    getVeryficode(form){
-      fetch('http://127.0.0.1:8001/user/getverifycode/').then((response)=>{
-                 return response.text()
-            }).then((val)=>{
-        let labelForCode = document.getElementById('forLoginCode')
-        if(form.loginCode.value && val.toLowerCase() === form.loginCode.value.toLowerCase()){
-          this.canBeSubmit = true
-          labelForCode.style.color = 'black'
-          labelForCode.innerText = '验证成功'
-          }else{
-            labelForCode.innerText = '验证码不正确'
-            labelForCode.style.color = 'red'
-            this.canBeSubmit = false
-          }
-         }).catch((e)=>{
-        console.log(e);
-      })
-
     },
     handle(event){
       let userName = event.target
@@ -121,6 +103,7 @@ export default {
             let url = form.action
             let newForm = new FormData(form)
             let obj = Object.fromEntries(newForm.entries())  //将formData数据转换为普通的对象格式，这一步很重要
+            let forLoginCode = document.getElementById('forLoginCode')
             fetch(url,{
                 method:'POST',
                 body: JSON.stringify(obj),
@@ -133,7 +116,6 @@ export default {
               }).then((response)=>{
                 return response.text()})
                 .then((value)=>{
-                  console.log(value);
                   value = JSON.parse(value)
                   if(value.status){  //说明请求到了数据
                     this.$router.go(-1)
@@ -145,10 +127,12 @@ export default {
                   }else if(value.msg === '密码错误'){
                     let forPwdEl = document.getElementById('pwd')
                     forPwdEl.style.borderColor = 'red'
+                    forLoginCode.innerText = '验证码'
+                    forLoginCode.style.color = ''
                   }else{
-                    let forLoginCode = document.getElementById('forLoginCode')
                     forLoginCode.innerText = '验证码错误'
                     forLoginCode.style.color = 'red'
+                    this.imgChange({target: document.getElementById('loginImg')})
                   }
               })
           }
