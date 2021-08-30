@@ -27,6 +27,9 @@ export default {
     /*box-shadow: 0 1px 1px rgba(100,100,100,.03);*/
   }
   .left,.right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     line-height: 44px;
     width:60px;

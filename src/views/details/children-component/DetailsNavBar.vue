@@ -11,7 +11,7 @@
         </div>
       </template>
       <template #left>
-        <div class="left" @click="goBack">&lt</div>
+        <div class="left" @click="goBack"></div>
       </template>
     </nav-bar>
   </div>
@@ -51,10 +51,11 @@
     flex:1
   }
   .left {
-    height: 100%;
-    width: 100%;
-    font-size: 2rem;
-    color:rgba(0,0,0,.6)
+    height: 13px;
+    width: 13px;
+    border-left: #999999 solid 3px;
+    border-top: #999999 solid 3px;
+    transform: rotateZ(-45deg);
   }
   .active {
     color:var(--color-high-text)

@@ -19,7 +19,7 @@
           </div>
         </div>
       </div>
-      <div class="arrow">&gt</div>
+      <div class="arrow" @click="logout"></div>
     </a>
   </div>
 </template>
@@ -35,6 +35,12 @@
           })
         }
       },
+      logout(){
+		    this.$store.state.isLogin = false
+		    this.$store.state.cartList = []
+		    this.$store.state.userInfo = null
+        location.reload()
+      }
     }
 	}
 </script>
@@ -60,10 +66,13 @@
     align-items: center;
   }
   #user-info .arrow {
-    width: 11px;
-    height: 22px;
-    margin-top: 18px;
+    width: 15px;
+    height: 15px;
+    margin: 18px;
     font-size: 1.4rem;
+    border-right: #999999 solid 3px;
+    border-bottom: #999999 solid 3px;
+    transform: rotateZ(-45deg);
     color: #999;
   }
   #user-info .login-info {

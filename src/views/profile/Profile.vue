@@ -1,4 +1,4 @@
-<template>
+<template :key="4">
   <div id="profile">
     <nav-bar class="nav-bar">
       <template #center>我的档案</template>

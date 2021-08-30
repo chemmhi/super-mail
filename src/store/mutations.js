@@ -6,11 +6,12 @@ export default {
     state.cartList.push(payload)
   },
   deleteItem(state,payload){
-    console.log(Array(...state.cartList));
-    Array(...state.cartList).forEach((item ,index, list)=>{
-      delete state.cartList[index]
-    })
-    console.log(Array(...state.cartList));
+    let tmp = [...state.cartList]
+    for(let i= tmp.length-1; i>=0; i--){
+      if(tmp[i].isChecked){
+        state.cartList.splice(i,1)
+      }
+    }
   },
   changeToLogin(state,payload){
     state.isLogin = true
