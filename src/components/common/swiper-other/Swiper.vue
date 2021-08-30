@@ -3,10 +3,14 @@
     <div class="swiper" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" ref=swiper>
       <slot></slot>
     </div>
-    <slot name="indicator"></slot>
+<!--    <slot name="indicator"></slot>-->
     <div class="indicator">
       <slot name="indicator" v-if="showIndicator && slideCount>1">
-        <div v-for="(item, index) in slideCount" class="indi-item" :class="{active: index === currentIndex-1}" :key="index"></div>
+        <div
+          v-for="(item, index) in slideCount"
+          class="indi-item"
+          :class="{active: index === currentIndex-1}"
+          :key="index"></div>
       </slot>
     </div>
   </div>
@@ -18,11 +22,11 @@
     props: {
       interval: {
         type: Number,
-        default: 3000
+        default: 2000
       },
       animDuration: {
         type: Number,
-        default: 300
+        default: 1500
       },
       moveRatio: {
         type: Number,
@@ -112,8 +116,8 @@
         // let swiperEl = this.$refs.swiper
         // let swiperEl = document.querySelector('.swiper-other');
 
-        let slidesEls = swiperEl.getElementsByClassName('slide');
-        // let slidesEls = document.getElementsByClassName('slide');
+        // let slidesEls = swiperEl.getElementsByClassName('slide');
+        let slidesEls = document.getElementsByClassName('slide');
         // 2.保存个数
         this.slideCount = slidesEls.length;
         // 3.如果大于1个, 那么在前后分别添加一个slide

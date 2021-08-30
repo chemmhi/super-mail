@@ -132,24 +132,27 @@
       },
 
       addToCart(){
-        const itemOfCart = {};
-        itemOfCart.iid = this.iid;
-        itemOfCart.desc = this.goods.desc;
-        itemOfCart.title = this.goods.title;
-        itemOfCart.price = this.goods.realPrice;
-        itemOfCart.image = this.topImage[0];
-        itemOfCart.count = 1;
-        itemOfCart.isChecked = true;
-        // this.$store.dispatch('addToCart',itemOfCart)
-        this.add(itemOfCart).then(res=>{
-          this.toastMessage = res;
-          this.toastShow = true;
-          setTimeout(()=>{
-            this.toastShow = false;
-            this.toastMessage = '';
-          },1500)
-        })
-
+        if (this.$store.state.isLogin){
+          const itemOfCart = {};
+          itemOfCart.iid = this.iid;
+          itemOfCart.desc = this.goods.desc;
+          itemOfCart.title = this.goods.title;
+          itemOfCart.price = this.goods.realPrice;
+          itemOfCart.image = this.topImage[0];
+          itemOfCart.count = 1;
+          itemOfCart.isChecked = true;
+          // this.$store.dispatch('addToCart',itemOfCart)
+          this.add(itemOfCart).then(res=>{
+            this.toastMessage = res;
+            this.toastShow = true;
+            setTimeout(()=>{
+              this.toastShow = false;
+              this.toastMessage = '';
+            },1500)
+          })
+        }else{
+          this.$router.push('/login')
+        }
       },
 
       imgEndLoad(){

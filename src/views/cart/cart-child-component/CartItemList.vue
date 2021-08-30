@@ -15,7 +15,7 @@ export default {
     cartItemList(){
       return this.$store.state.cartList
     }
-  }
+  },
 }
 </script>
 

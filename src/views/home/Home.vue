@@ -79,7 +79,6 @@
       this.getHomeGoodsContent('pop')
       this.getHomeGoodsContent('new')
       this.getHomeGoodsContent('sell')
-
     },
     mixins:[imgEventListener],
     activated() {
@@ -139,9 +138,9 @@
        */
       getHomeMultiDataContent(){
         getHomeMultiData().then((res)=>{
-        this.banners=res.data.banner.list
+          this.banners=res.data.banner.list
         this.recommends=res.data.recommend.list
-      })
+        })
       },
       getHomeGoodsContent(type){
         let page=this.goods[type].page+1;

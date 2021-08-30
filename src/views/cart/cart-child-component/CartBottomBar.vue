@@ -7,21 +7,36 @@
         @click="selectAll"/>
       <span>全选</span>
     </div>
-    <div>
-      <span>合计:</span>
-      <span>{{totalPrice}}</span>
-    </div>
-    <div class="to-calculate">去计算({{count}})</div>
+      <div v-if="canBeEdit">
+        <span>合计:</span>
+        <span>{{totalPrice}}</span>
+      </div>
+      <bottom-button v-if="canBeEdit">
+        <div>去计算({{ totalPrice }})</div>
+      </bottom-button>
+    <bottom-button v-else class="delete" @click="deleteItem">
+        <div >删除</div>
+    </bottom-button>
   </div>
 </template>
 
 <script>
   import CheckButton from "@/views/cart/cart-child-component/CheckButton";
+  import BottomButton from "./BottomButton";
   import {mapGetters} from 'vuex'
 export default {
   name: "CartBottomBar",
   components:{
     CheckButton,
+    BottomButton,
+  },
+  props:{
+    canBeEdit:{
+      type: Boolean,
+      default(){
+        return true
+      }
+    }
   },
   computed:{
     ...mapGetters(['cartList']),
@@ -46,6 +61,9 @@ export default {
         this.cartList.forEach(item=>item.isChecked = true)
       }
     },
+    deleteItem(){
+      this.$store.commit('deleteItem')
+    },
   }
 }
 </script>
@@ -69,13 +87,7 @@ export default {
   .select-all{
     line-height: 25px;
   }
-  .to-calculate{
-    background-color: #ff0036;
-    color: #fff;
-    height: 30px;
-    width: 90px;
-    line-height: 30px;
-    border-radius: 15px;
-    text-align: center;
+  .delete{
+    width: 60px;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="user-info">
+  <div id="user-info" >
     <a href="#" class="info-bar">
       <div class="icon-info">
         <slot name="user-icon">
@@ -7,7 +7,7 @@
             <img src="~assets/img/profile/user.svg" alt="" >
           </div>
         </slot>
-        <div class="login-info">
+        <div class="login-info" v-on:click="login">
           <slot name="user-nickname">
             <div>登录/注册</div>
           </slot>
@@ -19,14 +19,23 @@
           </div>
         </div>
       </div>
-      <div>&gt</div>
+      <div class="arrow">&gt</div>
     </a>
   </div>
 </template>
 
 <script>
 	export default {
-		name: "UserInfo"
+		name: "UserInfo",
+    methods:{
+		  login(e){
+        if(!this.$store.state.isLogin){
+          this.$router.push({
+            path: '/login'
+          })
+        }
+      },
+    }
 	}
 </script>
 
@@ -50,10 +59,12 @@
     display: flex;
     align-items: center;
   }
-  #user-info .arrow-svg {
+  #user-info .arrow {
     width: 11px;
     height: 22px;
     margin-top: 18px;
+    font-size: 1.4rem;
+    color: #999;
   }
   #user-info .login-info {
     font-size: .8rem;
@@ -65,6 +76,7 @@
     margin-top: 5px;
     margin-left: 15px;
     font-weight: 300;
+    line-height: 1.2rem;
   }
   #user-info .login-info .phone img {
     position: absolute;

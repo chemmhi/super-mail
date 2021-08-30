@@ -5,6 +5,8 @@ import getters from "@/store/getters";
 
 const state = {
   cartList:[],
+  isLogin: false,
+  userName: null
 }
 
 export const store = createStore({

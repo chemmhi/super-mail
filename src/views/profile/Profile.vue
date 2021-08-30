@@ -1,26 +1,33 @@
-<template>
+<template :key="1">
   <div id="profile">
     <nav-bar class="nav-bar">
       <template #center>我的档案</template>
     </nav-bar>
-    <user-info></user-info>
+    <user-info>
+      <template v-slot:user-nickname v-if="state">
+        <div>{{userInfo.userName}}</div>
+      </template>
+      <template #user-phone v-if="state">
+        <div>{{userInfo.phoneNumber}}</div>
+      </template>
+    </user-info>
 
     <section class="account">
       <div class="account-item">
         <div class="number">
-          <span class="balance">0.00</span>元
+          <span class="balance">{{ balance }}</span>
         </div>
         <div class="account-info">余额</div>
       </div>
       <div class="account-item">
         <div class="number">
-          <span class="balance">0</span>个
+          <span class="balance">{{ coupon }}</span>
         </div>
         <div class="account-info">优惠</div>
       </div>
       <div class="account-item">
         <div class="number">
-          <span class="balance">0</span>分
+          <span class="balance">{{ coinPoint }}</span>
         </div>
         <div class="account-info">积分</div>
       </div>
@@ -52,10 +59,27 @@
         serviceList: [
           {src:require('@/assets/img/profile/cart.svg'), info: '购物车'},
           {src:require('@/assets/img/profile/bag.svg'), info: '下载购物APP'},
-        ]
+        ],
+        userInfo: null,
+        state: false
       }
     },
     mounted: function () {
+		  this.emitter.on('loginSuccess',(value)=>{
+          this.userInfo = value
+          this.state = true
+      })
+    },
+    computed:{
+		  balance(){
+		    return this.state ? Number(this.userInfo.countBalance).toFixed(2) : Number(null).toFixed(2)
+      },
+      coupon(){
+		    return this.state ? Number(this.userInfo.coupon) : 0
+      },
+      coinPoint(){
+		    return this.state ? Number(this.userInfo.coinPoint) : 0
+      }
     }
 	}
 </script>

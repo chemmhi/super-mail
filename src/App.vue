@@ -1,6 +1,6 @@
 <template>
   <router-view v-slot="{ Component }">
-    <keep-alive exclude="Details">
+    <keep-alive exclude="Details,Login">
       <component :is=" Component " />
     </keep-alive>
   </router-view>
@@ -10,20 +10,21 @@
 
 <script>
 import MainTabBar from "@/components/content/tab-bar/MainTabBar";
+import {mapGetters} from 'vuex'
 export default {
   name: 'App',
   data(){
     return {
-
+      userName: null
     }
   },
   components: {
     MainTabBar
-  }
+  },
+
 }
 </script>
 
 <style>
-  @import '~assets/css/base.css';
-
+  @import 'assets/css/base.css';
 </style>
