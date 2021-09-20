@@ -43,7 +43,8 @@ const routes=[
 
 const router= createRouter({
   routes,
-  history:createWebHistory('configure-admin')
+  // history:createWebHistory('configure-admin'),
+  history:createWebHistory()
 })
 
 export default router

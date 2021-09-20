@@ -4,7 +4,8 @@
       <div class="icon-info">
         <slot name="user-icon">
           <div class="user-icon">
-            <img src="~assets/img/profile/user.svg" alt="" >
+            <input type="file" class="profile-picture" @change="changeProfile" @click="profileClick">
+            <img src="~assets/img/profile/user.svg" alt="" id="profile-img">
           </div>
         </slot>
         <div class="login-info" v-on:click="login">
@@ -36,10 +37,25 @@
         }
       },
       logout(){
+		    document.cookie = 'isLogin='
 		    this.$store.state.isLogin = false
 		    this.$store.state.cartList = []
 		    this.$store.state.userInfo = null
         location.reload()
+      },
+      changeProfile(e){
+		      const imgEl = document.getElementById('profile-img')
+          const url = window.URL.createObjectURL(e.target.files[0])
+          imgEl.src = url
+
+      },
+      profileClick(e){
+		    if(!this.$store.state.isLogin){
+		      e.preventDefault()
+		      this.$router.push({
+            path:'/login'
+          })
+        }
       }
     }
 	}
@@ -57,6 +73,19 @@
     align-items: center;
   }
   .user-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: relative;
+  }
+  .profile-picture{
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    opacity: 0;
+  }
+  #profile-img{
     width: 60px;
     height: 60px;
     border-radius: 50%;

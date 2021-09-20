@@ -15,10 +15,10 @@
 
 const path = require('path')
 module.exports = {
-  publicPath:'/dist/',
+  publicPath:'./',
   chainWebpack: config => {
     config.resolve.alias
-        // .set("@",path.join(__dirname,'src'))
+        .set("@",path.join(__dirname,'src'))
         .set("components",path.join(__dirname,'src/components'))
         .set('views',path.join(__dirname,'src/views'))
         .set('assets',path.join(__dirname,'src/assets'))

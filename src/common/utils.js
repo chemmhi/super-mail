@@ -1,3 +1,5 @@
+
+
 export function debounce(func,timeOut=300){
       let timer = null
       return (...args)=>{
@@ -17,3 +19,4 @@ export function throttle(func, timeOut=300){
     },timeOut)
   }
 }
+

@@ -21,6 +21,7 @@ import NavBar from "@/components/common/navbar/NavBar";
 import CartItemList from "@/views/cart/cart-child-component/CartItemList";
 import Scroll from "@/components/common/scroll/Scroll";
 import CartBottomBar from "@/views/cart/cart-child-component/CartBottomBar";
+import {baseUrl} from "network/request";
 
 import {mapGetters} from 'vuex'
 
@@ -36,11 +37,15 @@ export default {
     ...mapGetters(['itemCount']),
     edit(){
       return this.canBeEdit ? '管理' : (!this.canBeEdit ? ' 完成': '')
+    },
+    cartUrl(){
+      return this.url + 'user/updatecart/'
     }
   },
   data(){
     return {
-      canBeEdit: true
+      canBeEdit: true,
+      url: baseUrl
     }
   },
   methods:{
@@ -49,13 +54,14 @@ export default {
         userName: this.$store.state.userName,
         cart: this.$store.state.cartList,
       }
-      navigator.sendBeacon('http://127.0.0.1:8001/user/updatecart/',JSON.stringify(data))
+      navigator.sendBeacon(this.cartUrl,JSON.stringify(data))
     },
     editCart(){
       this.canBeEdit = !this.canBeEdit
 
     },
   },
+
   activated() {
     this.$refs.cartScroll.refresh()
     this.updateCart()

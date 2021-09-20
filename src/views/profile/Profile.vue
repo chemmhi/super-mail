@@ -42,7 +42,9 @@
   import UserInfo from "@/views/profile/children-components/UserInfo";
   import ListView from "@/views/profile/children-components/ListView";
   import NavBar from "@/components/common/navbar/NavBar";
-	export default {
+  import {fetchapi} from "network/request";
+
+  export default {
 		name: "Profile",
     components: {
 		  NavBar,
@@ -67,6 +69,7 @@
     activated () {
       this.state = this.$store.state.isLogin
       this.userInfo = this.$store.state.userInfo
+
     },
     computed:{
 		  balance(){
@@ -78,8 +81,9 @@
       coinPoint(){
 		    return this.state ? Number(this.userInfo.coinPoint) : 0
       }
-    }
-	}
+    },
+
+  }
 </script>
 
 <style scoped>

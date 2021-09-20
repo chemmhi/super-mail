@@ -4,7 +4,7 @@
         <div>登录</div>
       </template>
     </login-frame>
-    <form id="form1" name="form1" action="http://127.0.0.1:8001/user/login/" class="form1" method="post">
+    <form id="form1" name="form1" :action="formUrl" class="form1" method="post">
       <form-item>
         <label for="loginUserName" id="forLoginUserName">用户名</label>
         <input type="text" id="loginUserName" placeholder="请输入用户名" name="loginUserName">
@@ -19,13 +19,13 @@
           <input type="text" id="loginCode" placeholder="验证码" name="loginCode">
           <img use-credentials="true"
                id="loginImg"
-               src="http://127.0.0.1:8001/user/verifycode/img"
+               :src="imgUrl"
                alt="" @click="imgChange">
         </div>
       </form-item>
       <form-item class="other">
         <div class="left">
-          <input type="checkbox" name="freelogin">
+          <input type="checkbox" name="freeLogin" value="yes">
           <span class="">一个月内免登录</span>
         </div>
         <span class="forget">忘记密码?</span>
@@ -40,6 +40,8 @@
 <script>
 import FormItem from "./childcomponent/FormItem";
 import LoginFrame from "./childcomponent/LoginFrame";
+import {fetchapi,baseUrl} from "network/request";
+
 export default {
   name: "Login",
   components:{
@@ -48,7 +50,8 @@ export default {
   },
   data(){
     return {
-      isUserName: false   //用来验证用户是否可以提交
+      isUserName: false,   //用来验证用户是否可以提交
+      url: baseUrl
     }
   },
   methods:{
@@ -58,14 +61,14 @@ export default {
     imgChange(event){
       // console.log(event);
       let target = event.target
-      target.src = target.src + "?"
+      target.src = target.src + '#'
     },
     handle(event){
       let userName = event.target
       let payload = {
         userName: userName.value
       }
-      fetch('http://127.0.0.1:8001/user/username/validation/',{
+      fetchapi('user/username/validation/',{
           method:'POST',
           body: JSON.stringify(payload)
         })
@@ -92,6 +95,12 @@ export default {
     },
     reverseCurrentState(){
       return this.state === 'login'? '注册' : (this.state === 'register'? '登录' : '登录')
+    },
+    imgUrl (){
+      return this.url + 'user/verifycode/img'
+    },
+    formUrl(){
+      return this.url + 'user/login/'
     }
   },
   mounted() {
@@ -119,6 +128,7 @@ export default {
         let forLoginCode = document.getElementById('forLoginCode')
         fetch(url,{
             method:'POST',
+            cache: "no-cache",
             body: JSON.stringify(obj),
             // credentials: 'include',
             // mode: 'cors',
@@ -131,12 +141,20 @@ export default {
             .then((value)=>{
               value = JSON.parse(value)
               if(value.status){  //说明请求到了数据
+                console.log(value);
                 this.$store.commit('setUserInfo', value.data)
                 this.$store.commit('changeToLogin')
-                this.$store.commit('setUserName', value.data.userName)
+                const userName = value.data.userName
+                const t_id = value.data['t_id']
+                const c_id = value.data['c_id']
+                this.$store.commit('setUserName', userName)
                 let cart = value.data.cart ? Array.from(value.data.cart) : []
                 this.$store.commit('loadingCart', cart)
                 this.$router.push('/profile')
+                document.cookie = `UserName=${userName}; max-age= 2592000`
+                document.cookie = `t_id=${t_id}; max-age= 2592000`
+                document.cookie = `c_id=${c_id}; max-age= 2592000`
+                document.cookie = `isLogin=true}; max-age= 2592000`
               }else if(value.msg === '密码错误'){
                 forPwdEl.style.borderColor = 'red'
                 labelForPwdEl.innerText = '密码错误'
@@ -170,6 +188,7 @@ export default {
     padding-bottom: 30px;
     border: solid #5555 1px;
     align-content: space-evenly;
+    -webkit-align-content: space-around;
     flex-direction: column;
     justify-content: space-evenly;
     flex-wrap: wrap;

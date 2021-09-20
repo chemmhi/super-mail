@@ -26,7 +26,7 @@
         <div class="verify-container">
           <input type="text" id="registerCode" placeholder="验证码" name="registerCode">
           <img use-credentials="true"
-               src="http://127.0.0.1:8001/user/verifycode/img"
+               :src="imgUrl"
                id="registerImg"
                alt="" @click="imgChange">
         </div>
@@ -41,6 +41,7 @@
 <script>
 import LoginFrame from "../login/childcomponent/LoginFrame";
 import FormItem from "../login/childcomponent/FormItem";
+import {baseUrl,fetchapi} from "network/request";
 
 export default {
   name: "Register",
@@ -57,7 +58,7 @@ export default {
         userName: event.target.value
       }
       let usernameLabel = document.getElementById('forUserName')
-      fetch('http://127.0.0.1:8001/user/username/validation/',{
+      fetchapi('user/username/validation/',{
           method:'POST',
           body: JSON.stringify(payload)
         }).then((response)=>{
@@ -100,68 +101,71 @@ export default {
     imgChange(event){
       // console.log(event);
       let target = event.target
-      target.src = target.src + "?"
+      target.src = target.src + "#"
     },
   },
-    data(){
-    return {
-      form: null,
-      isUserName: false,
-      isPassword: false,
-      isPhoneNumber: false,
+  data(){
+  return {
+    form: null,
+    isUserName: false,
+    isPassword: false,
+    isPhoneNumber: false,
+    url: baseUrl
+  }
+},
+  computed:{
+    currentState(){
+      return this.state === 'login'? '登录' : (this.state === 'register'? '注册' : '登录')
+    },
+    reverseCurrentState(){
+      return this.state === 'login'? '注册' : (this.state === 'register'? '登录' : '登录')
+    },
+    imgUrl(){
+      return this.url + 'user/verifycode/img'
     }
   },
-    computed:{
-      currentState(){
-        return this.state === 'login'? '登录' : (this.state === 'register'? '注册' : '登录')
-      },
-      reverseCurrentState(){
-        return this.state === 'login'? '注册' : (this.state === 'register'? '登录' : '登录')
+  mounted() {
+    let form = document.getElementById('form1')
+    let labelForCode = document.getElementById('forRegisterCode')
+    //判断用户名是否存在
+    form.userName.addEventListener('change',this.handle)
+    form.userName.addEventListener('blur',this.handle)
+    //判断密码是否正确
+    form.pwd2.addEventListener('change',this.handlepwd)
+    form.pwd2.addEventListener('blur',this.handlepwd)
+    form.pwd1.addEventListener('blur',this.handlepwd)
+    form.pwd1.addEventListener('blur',this.handlepwd)
+    //判断手机号格式是否正确
+    form.registerPhoneNum.addEventListener('blur', this.handlePhoneNum)
+    form.registerPhoneNum.addEventListener('change', this.handlePhoneNum)
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault()
+      if(this.isUserName && this.isPhoneNumber && this.isPassword){ //说明用户名，密码手机号3项验证成功
+        let url = 'user/register/'
+        let newForm = new FormData(e.target)
+        let data = Object.fromEntries(newForm.entries())
+        // this.$router.go(-1)
+        fetchapi(url,{
+          method:'POST',
+          body: JSON.stringify(data),
+          headers:{'Content-Type': 'application/json'}
+        })
+          .then((response)=>{
+          return response.text()
+        })
+          .then((value)=>{
+            value = JSON.parse(value)
+          if(value.status){
+            this.$router.push('/login')
+          }else{
+            labelForCode.innerText = value.msg
+            labelForCode.style.color = 'red'
+            this.imgChange({target: document.getElementById('registerImg')})
+          }
+        })
       }
-    },
-    mounted() {
-      let form = document.getElementById('form1')
-      let labelForCode = document.getElementById('forRegisterCode')
-      //判断用户名是否存在
-      form.userName.addEventListener('change',this.handle)
-      form.userName.addEventListener('blur',this.handle)
-      //判断密码是否正确
-      form.pwd2.addEventListener('change',this.handlepwd)
-      form.pwd2.addEventListener('blur',this.handlepwd)
-      form.pwd1.addEventListener('blur',this.handlepwd)
-      form.pwd1.addEventListener('blur',this.handlepwd)
-      //判断手机号格式是否正确
-      form.registerPhoneNum.addEventListener('blur', this.handlePhoneNum)
-      form.registerPhoneNum.addEventListener('change', this.handlePhoneNum)
-      form.addEventListener('submit', (e)=>{
-        e.preventDefault()
-        if(this.isUserName && this.isPhoneNumber && this.isPassword){ //说明用户名，密码手机号3项验证成功
-          let url = 'http://127.0.0.1:8001/user/register/'
-          let newForm = new FormData(e.target)
-          let data = Object.fromEntries(newForm.entries())
-          console.log(data);
-          // this.$router.go(-1)
-          fetch(url,{
-            method:'POST',
-            body: JSON.stringify(data),
-            headers:{'Content-Type': 'application/json'}
-          })
-            .then((response)=>{
-            return response.text()
-          })
-            .then((value)=>{
-              value = JSON.parse(value)
-            if(value.status){
-              this.$router.push('/login')
-            }else{
-              labelForCode.innerText = value.msg
-              labelForCode.style.color = 'red'
-              this.imgChange({target: document.getElementById('registerImg')})
-            }
-          })
-        }
-      })
-    }
+    })
+  }
 }
 </script>
 
