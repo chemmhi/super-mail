@@ -34,7 +34,8 @@ export default {
         fetchapi(`user/getDetails/`,{
           method: 'POST',
           body:JSON.stringify(cookie),
-          headers:{'Access-Control-Allow-Origin': '*'}
+          headers:{'Access-Control-Allow-Origin': '*'},
+          cache: 'no-store',
         }).then((response) => {
           return response.text()
         }).then((value) => {

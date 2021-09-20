@@ -5,7 +5,7 @@
         <slot name="user-icon">
           <div class="user-icon">
             <input type="file" class="profile-picture" @change="changeProfile" @click="profileClick">
-            <img src="~assets/img/profile/user.svg" alt="" id="profile-img">
+            <img :src="profileUrl" alt="" id="profile-img">
           </div>
         </slot>
         <div class="login-info" v-on:click="login">
@@ -26,8 +26,15 @@
 </template>
 
 <script>
-	export default {
+  import {fetchapi, baseUrl} from "network/request";
+
+  export default {
 		name: "UserInfo",
+    data(){
+		  return {
+		    imgurl: require('assets/img/profile/user.svg')
+      }
+    },
     methods:{
 		  login(e){
         if(!this.$store.state.isLogin){
@@ -47,7 +54,17 @@
 		      const imgEl = document.getElementById('profile-img')
           const url = window.URL.createObjectURL(e.target.files[0])
           imgEl.src = url
-
+          const formData = new FormData()
+          formData.append('image', e.target.files[0])
+          formData.append('userName', this.$store.state.userName)
+          fetchapi('user/putProfileImg/',{
+            method: 'POST',
+            body: formData
+          }).then((response) => {
+            return response.text()
+          }).then((value) => {
+            imgEl.src = url
+          })
       },
       profileClick(e){
 		    if(!this.$store.state.isLogin){
@@ -55,6 +72,15 @@
 		      this.$router.push({
             path:'/login'
           })
+        }
+      }
+    },
+    computed:{
+		  profileUrl(){
+		    if(this.$store.state.isLogin){
+		       return baseUrl + this.$store.state.userInfo.profileImgUrl;
+        }else{
+		       return this.imgurl
         }
       }
     }

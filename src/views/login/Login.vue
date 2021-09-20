@@ -141,7 +141,6 @@ export default {
             .then((value)=>{
               value = JSON.parse(value)
               if(value.status){  //说明请求到了数据
-                console.log(value);
                 this.$store.commit('setUserInfo', value.data)
                 this.$store.commit('changeToLogin')
                 const userName = value.data.userName
