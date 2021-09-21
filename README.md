@@ -1,5 +1,9 @@
 # super-mall
 
+服务器地址：
+
+http://114.115.142.213
+
 ## Project setup
 ```
 npm install
