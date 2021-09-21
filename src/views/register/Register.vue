@@ -60,6 +60,7 @@ export default {
       let usernameLabel = document.getElementById('forUserName')
       fetchapi('user/username/validation/',{
           method:'POST',
+          cache: 'no-store',
           body: JSON.stringify(payload)
         }).then((response)=>{
              return response.text()
@@ -98,10 +99,15 @@ export default {
         labelForNum.style.color = 'red'
       }
     },
+    getImgUrl(event){
+      const imgEl = event.target ? event.target : event
+      fetchapi('user/verifycode/img/',{
+        cache: 'no-store',
+      }).then((response) => response.blob())
+      .then((value) => imgEl.src = window.URL.createObjectURL(value) )
+    },
     imgChange(event){
-      // console.log(event);
-      let target = event.target
-      target.src = target.src + "#"
+      this.getImgUrl(event)
     },
   },
   data(){
@@ -125,6 +131,8 @@ export default {
     }
   },
   mounted() {
+    const imgEl = document.getElementById('registerImg')
+    this.getImgUrl(imgEl)
     let form = document.getElementById('form1')
     let labelForCode = document.getElementById('forRegisterCode')
     //判断用户名是否存在
@@ -147,6 +155,7 @@ export default {
         // this.$router.go(-1)
         fetchapi(url,{
           method:'POST',
+          cache:'no-store',
           body: JSON.stringify(data),
           headers:{'Content-Type': 'application/json'}
         })

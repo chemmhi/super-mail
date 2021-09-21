@@ -51,20 +51,19 @@
         location.reload()
       },
       changeProfile(e){
-		      const imgEl = document.getElementById('profile-img')
-          const url = window.URL.createObjectURL(e.target.files[0])
-          imgEl.src = url
-          const formData = new FormData()
-          formData.append('image', e.target.files[0])
-          formData.append('userName', this.$store.state.userName)
-          fetchapi('user/putProfileImg/',{
-            method: 'POST',
-            body: formData
-          }).then((response) => {
-            return response.text()
-          }).then((value) => {
-            imgEl.src = url
-          })
+        const imgEl = document.getElementById('profile-img')
+        const url = window.URL.createObjectURL(e.target.files[0])
+        console.log('success');
+        imgEl.src = url
+        const formData = new FormData()
+        formData.append('image', e.target.files[0])
+        formData.append('userName', this.$store.state.userName)
+        fetchapi('user/putProfileImg/',{
+          method: 'POST',
+          body: formData
+        })
+          // .then((response) => response.text() )
+          // .then((value) => console.log('ok'))
       },
       profileClick(e){
 		    if(!this.$store.state.isLogin){
@@ -77,8 +76,8 @@
     },
     computed:{
 		  profileUrl(){
-		    if(this.$store.state.isLogin){
-		       return baseUrl + this.$store.state.userInfo.profileImgUrl;
+		    if(this.$store.state.isLogin && this.$store.state.userInfo.profileImgUrl){
+          return baseUrl + this.$store.state.userInfo.profileImgUrl;
         }else{
 		       return this.imgurl
         }

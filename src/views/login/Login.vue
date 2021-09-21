@@ -19,7 +19,6 @@
           <input type="text" id="loginCode" placeholder="验证码" name="loginCode">
           <img use-credentials="true"
                id="loginImg"
-               :src="imgUrl"
                alt="" @click="imgChange">
         </div>
       </form-item>
@@ -58,10 +57,15 @@ export default {
     switchState(){
       this.$router.push('/register')
     },
+    getImgUrl(event){
+      const imgEl = event.target ? event.target : event
+      fetchapi('user/verifycode/img/',{
+        cache: 'no-store',
+      }).then((response) => response.blob())
+      .then((value) => imgEl.src = window.URL.createObjectURL(value) )
+    },
     imgChange(event){
-      // console.log(event);
-      let target = event.target
-      target.src = target.src + '#'
+      this.getImgUrl(event)
     },
     handle(event){
       let userName = event.target
@@ -70,6 +74,7 @@ export default {
       }
       fetchapi('user/username/validation/',{
           method:'POST',
+          cache: 'no-store',
           body: JSON.stringify(payload)
         })
         .then((response)=>{
@@ -96,14 +101,13 @@ export default {
     reverseCurrentState(){
       return this.state === 'login'? '注册' : (this.state === 'register'? '登录' : '登录')
     },
-    imgUrl (){
-      return this.url + 'user/verifycode/img'
-    },
     formUrl(){
       return this.url + 'user/login/'
     }
   },
   mounted() {
+    let imgEl = document.getElementById('loginImg')
+    this.getImgUrl(imgEl)
     let form = document.getElementById('form1')
     let forPwdEl = document.getElementById('pwd')
     let labelForPwdEl = document.getElementById('forPwd')
@@ -128,7 +132,7 @@ export default {
         let forLoginCode = document.getElementById('forLoginCode')
         fetch(url,{
             method:'POST',
-            cache: "no-cache",
+            cache: "no-store",
             body: JSON.stringify(obj),
             // credentials: 'include',
             // mode: 'cors',
@@ -153,7 +157,7 @@ export default {
                 document.cookie = `UserName=${userName}; max-age= 2592000`
                 document.cookie = `t_id=${t_id}; max-age= 2592000`
                 document.cookie = `c_id=${c_id}; max-age= 2592000`
-                document.cookie = `isLogin=true}; max-age= 2592000`
+                document.cookie = `isLogin=true; max-age= 2592000`
               }else if(value.msg === '密码错误'){
                 forPwdEl.style.borderColor = 'red'
                 labelForPwdEl.innerText = '密码错误'

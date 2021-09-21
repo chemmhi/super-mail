@@ -24,5 +24,8 @@ export default {
   },
   setUserInfo(state, payload){
     state.userInfo = payload
+  },
+  setUserImgUrl(state,payload){
+    state.userInfo.profileImgUrl = payload
   }
 }
